@@ -1,10 +1,10 @@
-import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { fetchData } from "./channelSlice";
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { fetchData } from './channelSlice';
 
 const messageAdapter = createEntityAdapter();
 const initialState = messageAdapter.getInitialState();
 const messagesSlice = createSlice({
-  name: "messages",
+  name: 'messages',
   initialState,
   reducers: {
     addMessage: messageAdapter.addOne,

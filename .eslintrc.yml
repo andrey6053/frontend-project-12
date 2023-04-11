@@ -1,0 +1,15 @@
+env:
+  browser: true
+  es2021: true
+extends: airbnb-base
+overrides: []
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+rules:
+  {
+    "max-len": "off",
+    "array-callback-return": "off",
+    "no-param-reassign": "off",
+    "import/no-cycle": "off"
+  }

@@ -44,6 +44,7 @@ export default function Login() {
                 <Form.Label>Логин</Form.Label>
                 <Form.Control
                   required
+                  isInvalid={error}
                   name="username"
                   onChange={formik.handleChange}
                   value={formik.values.username}
@@ -56,6 +57,7 @@ export default function Login() {
                 <Form.Control
                   required
                   name="password"
+                  isInvalid={error}
                   onChange={formik.handleChange}
                   value={formik.values.password}
                   type="password"
