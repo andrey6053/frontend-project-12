@@ -4,7 +4,8 @@ import { io } from "socket.io-client";
 import { useSocket } from "../../hooks/useSocket";
 
 export default function SocketProvider({ children }) {
-  const socket = useSocket(io());
+  const socket = io();
+  useSocket(socket);
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}

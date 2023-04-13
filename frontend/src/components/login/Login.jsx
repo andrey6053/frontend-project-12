@@ -1,18 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Form, Button, Col, Card, Container } from "react-bootstrap";
 import { useFormik } from "formik";
-import * as yup from "yup";
 import { login } from "../../actions/user";
 import UserContext from "../../contexts/userContext";
+import { LoginSchema } from "../../utils/validator";
 
 export default function Login() {
   const [error, setError] = useState(false);
   const { setIsAuth, setUser } = useContext(UserContext);
 
-  let schema = yup.object().shape({
-    username: yup.string().required(),
-    password: yup.string().required().min(4),
-  });
+  let schema = LoginSchema;
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -22,11 +19,13 @@ export default function Login() {
       const valid = await schema.isValid(values);
       if (!valid) return setError(true);
       const response = await login(values);
-      const { username, token } = response;
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", username);
-      setIsAuth(true);
-      setUser(username);
+      if (response) {
+        const { username, token } = response;
+        localStorage.setItem("token", token);
+        localStorage.setItem("username", username);
+        setIsAuth(true);
+        setUser(username);
+      }
     },
   });
 

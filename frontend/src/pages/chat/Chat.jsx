@@ -9,18 +9,22 @@ import Messages from "../../components/messages/Messages";
 export default function Chat() {
   const dispatch = useDispatch();
   const isLoader = useSelector((state) => state.channels.isLoader);
-  const curChannelId = useSelector((state) => state.channels.currentChannelId);
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-  if (isLoader) return <Loader />;
 
   return (
     <Container className="my-4 h-100 overflow-hidden rounded shadow">
-      <Row className="h-100 bg-white flex-md-row">
-        <Channels />
-        {curChannelId && <Messages />}
-      </Row>
+      {isLoader ? (
+        <Row className="row h-100 justify-content-center align-items-center">
+          <Loader />
+        </Row>
+      ) : (
+        <Row className="h-100 bg-white flex-md-row">
+          <Channels />
+          <Messages />
+        </Row>
+      )}
     </Container>
   );
 }

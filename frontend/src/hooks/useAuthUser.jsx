@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 export function useAuthUser() {
   const [user, setUser] = useState("");
   const [isAuth, setIsAuth] = useState(false);
-
   useEffect(() => {
     const userName = localStorage.getItem("username");
     const token = localStorage.getItem("token");
@@ -12,5 +11,5 @@ export function useAuthUser() {
       setIsAuth(true);
     }
   }, []);
-  return { user, isAuth, setUser, setIsAuth };
+  return {user,isAuth,setUser,setIsAuth};
 }

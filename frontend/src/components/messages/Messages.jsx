@@ -14,6 +14,7 @@ export default function Messages() {
   const msgList = useSelector(messages.selectAll).filter(
     (msg) => msg.channelId === curChannelId
   );
+  if (!curChannelId) return
   return (
     <Col className="p-0 h-100">
       <div className="d-flex flex-column h-100">

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
-import { sendMessage } from "../../../actions/message";
+import { socketEvent } from "../../../actions/message";
 import UserContext from "../../../contexts/userContext";
 import socketContext from "../../../contexts/socketContext";
 
@@ -16,11 +16,15 @@ export default function FormMessage() {
     },
     onSubmit: async (values) => {
       if (values.msgText === "") return;
-      sendMessage(socket, {
-        body: values.msgText,
-        channelId: curChannelId,
-        username: user,
-      });
+      socketEvent(
+        socket,
+        {
+          body: values.msgText,
+          channelId: curChannelId,
+          username: user,
+        },
+        "newMessage"
+      );
       values.msgText = "";
     },
   });
@@ -39,6 +43,7 @@ export default function FormMessage() {
           placeholder="Введите сообщение..."
           value={formik.values.msgText}
           onChange={formik.handleChange}
+          autoFocus
         />
         <Button className="btn-group-vertical rounded" type="submit">
           Отправить

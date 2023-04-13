@@ -5,3 +5,6 @@
 # Railway
 
 ## https://frontend-project-12-production-9868.up.railway.app/
+
+# Test account
+## Username: admin; Password: admin

@@ -1,6 +1,6 @@
-export const sendMessage = async (socket, data) => {
+export const socketEvent = (socket, data, type) => {
   try {
-    socket.emit('newMessage', data);
+    socket.emit(type, data);
   } catch (e) {
     console.log(e);
   }

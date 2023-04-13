@@ -6,12 +6,13 @@ import Login from "../components/login/Login";
 import Navbar from "../components/navbar/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserContext from "../contexts/userContext";
-import Chat from './chat/Chat'
+import Chat from "./chat/Chat";
 import { useAuthUser } from "../hooks/useAuthUser";
 import SocketProvider from "../components/socketProvider/SocketProvider";
+import ModalWindow from "../components/modal/Modal";
+
 function App() {
   const { user, isAuth, setUser, setIsAuth } = useAuthUser();
-
   return (
     <UserContext.Provider value={{ user, isAuth, setUser, setIsAuth }}>
       <BrowserRouter>
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/" element={<Chat />}></Route>
                 <Route path="*" element={<Chat />}></Route>
               </Routes>
+              <ModalWindow />
             </SocketProvider>
           )}
         </div>
