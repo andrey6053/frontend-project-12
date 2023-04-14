@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import {Link} from "react-router-dom"
 import { Form, Button, Col, Card, Container } from "react-bootstrap";
 import { useFormik } from "formik";
 import { login } from "../../actions/user";
@@ -39,7 +40,7 @@ export default function Login() {
           <Card.Body className="p-5 row">
             <Form className="w-100" onSubmit={formik.handleSubmit}>
               <h1 className="text-center mb-4">Войти</h1>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label>Логин</Form.Label>
                 <Form.Control
                   required
@@ -75,7 +76,7 @@ export default function Login() {
           <Card.Footer className="p-4">
             <div className="text-center">
               <span>Нет аккаунта? </span>
-              <Card.Link href="/registration">Регистрация</Card.Link>
+              <Link to="/signup">Регистрация</Link>
             </div>
           </Card.Footer>
         </Card>

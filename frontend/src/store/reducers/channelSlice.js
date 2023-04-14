@@ -14,6 +14,7 @@ const initialState = channelAdapter.getInitialState({
   isLoader: false,
   error: null,
   currentChannelId: null,
+  ownerNewChannel:null
 });
 const channelSlice = createSlice({
   name: "channels",
@@ -22,9 +23,13 @@ const channelSlice = createSlice({
     setCurrentChannelId: (state, action) => {
       state.currentChannelId = action.payload;
     },
+    setOwnerNewChannel: (state,action) => {
+      state.ownerNewChannel = action.payload
+    },
     addChannel: (state,action) => {
       channelAdapter.addOne(state,action.payload)
-      state.currentChannelId = action.payload.id
+      const userName = localStorage.getItem("username")
+      if (state.ownerNewChannel === userName) state.currentChannelId = action.payload.id
     },
     removeChannel: (state,action) => {
       const restEntities = Object.values(state.entities).filter((channel) => channel.id !== action.payload.id)
@@ -55,6 +60,6 @@ const channelSlice = createSlice({
 });
 
 export const selectors = channelAdapter.getSelectors((state) => state.channels);
-export const { setCurrentChannelId, addChannel, removeChannel, renameChannel } =
+export const { setCurrentChannelId, addChannel, removeChannel, renameChannel,setOwnerNewChannel } =
   channelSlice.actions;
 export default channelSlice.reducer;
