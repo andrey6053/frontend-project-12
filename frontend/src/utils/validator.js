@@ -6,17 +6,17 @@ export const LoginSchema = yup.object().shape({
 });
 
 export const ChannelSchema = (channels) => yup.object().shape({
-  name: yup.string().notOneOf(channels, 'alreadyExist').required('required'),
+  name: yup.string().min(3,"err_minLengthChannel").notOneOf(channels, 'err_alreadyExist').required('err_required'),
 });
 
 export const SignupSchema = yup.object({
   username: yup.string()
-    .min(3, 'lengthUsername')
-    .max(20, 'lengthUsername')
-    .required('required'),
+    .min(3, 'err_lengthUsername')
+    .max(20, 'err_lengthUsername')
+    .required('err_required'),
   password: yup.string()
-    .min(6, 'minPassword')
-    .required('required'),
+    .min(6, 'err_minPassword')
+    .required('err_required'),
   passwordConfirmation: yup.string()
-    .oneOf([yup.ref('password'), null], 'samePassword'),
+    .oneOf([yup.ref('password'), null], 'err_samePassword'),
 });

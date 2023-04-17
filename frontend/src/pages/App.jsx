@@ -11,6 +11,7 @@ import { useAuthUser } from "../hooks/useAuthUser";
 import SocketProvider from "../components/socketProvider/SocketProvider";
 import ModalWindow from "../components/modal/Modal";
 import Registration from "./registration/Registration";
+import Toast from '../components/toastContainer/Toast'
 
 function App() {
   const { user, isAuth, setUser, setIsAuth } = useAuthUser();
@@ -19,6 +20,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Navbar />
+          <Toast />
           {!isAuth ? (
             <Routes>
               <Route path="/" element={<Login />}></Route>

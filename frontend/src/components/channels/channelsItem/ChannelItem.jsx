@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Button, Nav, ButtonGroup } from "react-bootstrap";
 import { setCurrentChannelId } from "../../../store/reducers/channelSlice";
-import { showModal } from "../../../store/reducers/uiSlice";
+import { showModal, setIdDropdown } from "../../../store/reducers/uiSlice";
 
 export default function ChannelItem(props) {
-  const [isDropdown, setIsDropdown] = useState(false);
+  const { t } = useTranslation();
   const curChannelId = useSelector((state) => state.channels.currentChannelId);
+  const idDropdown = useSelector((state) => state.ui.idDropdown);
   const dispatch = useDispatch();
   const { id, name } = props.channel;
   function changeChannel(e) {
@@ -16,20 +18,29 @@ export default function ChannelItem(props) {
   }
   function modalHandler(e, type) {
     e.preventDefault();
-    setIsDropdown(false);
-    const title = type === "renameChannel" ? "Переименовать" : "Удалить";
+    const title =
+      type === "renameChannel" ? `${t("rename")}` : `${t("delete")}`;
     const modal = {
-      title: `${title} канал`,
+      title: `${title} ${t("channel")}`,
       type,
       idChannel: id,
     };
     dispatch(showModal(modal));
   }
+  function dropdownHandler() {
+    if (idDropdown === id) {
+      dispatch(setIdDropdown(null));
+    } else {
+      dispatch(setIdDropdown(id));
+    }
+  }
   return (
     <Nav.Item as="li" className="w-100">
-      <ButtonGroup className={`d-flex ${isDropdown ? "show" : ""} dropdown`}>
+      <ButtonGroup
+        className={`d-flex ${id === idDropdown ? "show" : ""} dropdown`}
+      >
         <Button
-          className="w-100 rounded-0 text-start d-flex"
+          className="w-100 rounded-0 text-start d-flex text-truncate"
           variant={id === curChannelId ? "secondary" : "none"}
           onClick={changeChannel}
         >
@@ -40,15 +51,15 @@ export default function ChannelItem(props) {
           type="button"
           className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
           variant={id === curChannelId ? "secondary" : "none"}
-          onClick={() => setIsDropdown(!isDropdown)}
+          onClick={() => dropdownHandler(id)}
         ></Button>
         <div
           x-placement="bottom-start"
-          className={`dropdown-menu ${isDropdown ? "show" : ""}`}
+          className={`dropdown-menu ${id === idDropdown ? "show" : ""}`}
           style={{
             position: "absolute",
-            inset: "0px 0px auto auto",
-            transform: "translate(0px,40px)",
+            inset: "0px auto auto 0px",
+            transform: "translate3d(-8px,40px,0px)",
           }}
         >
           <a
@@ -58,7 +69,7 @@ export default function ChannelItem(props) {
             href="#"
             onClick={(e) => modalHandler(e, "removeChannel")}
           >
-            Удалить
+            {t("delete")}
           </a>
           <a
             className="dropdown-item"
@@ -67,7 +78,7 @@ export default function ChannelItem(props) {
             href="#"
             onClick={(e) => modalHandler(e, "renameChannel")}
           >
-            Переименовать
+            {t("rename")}
           </a>
         </div>
       </ButtonGroup>

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   modal: {},
   isModalShow: false,
+  idDropdown: null,
 };
 const uiSlice = createSlice({
   name: "ui",
@@ -14,10 +15,13 @@ const uiSlice = createSlice({
     },
     hideModal: (state) => {
       state.isModalShow = false;
-      state.modal = {}
+      state.modal = {};
+    },
+    setIdDropdown: (state, action) => {
+      state.idDropdown = action.payload;
     },
   },
 });
 
-export const { showModal, hideModal } = uiSlice.actions;
+export const { showModal, hideModal,setIdDropdown } = uiSlice.actions;
 export default uiSlice.reducer;

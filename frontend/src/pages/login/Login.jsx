@@ -1,27 +1,28 @@
 import React, { useContext, useState } from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import { Form, Button, Col, Card, Container } from "react-bootstrap";
 import { useFormik } from "formik";
 import { login } from "../../actions/user";
 import UserContext from "../../contexts/userContext";
-import { LoginSchema } from "../../utils/validator";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
-  const [error, setError] = useState(false);
+  const { t } = useTranslation();
+  const [error, setError] = useState("");
   const { setIsAuth, setUser } = useContext(UserContext);
-
-  let schema = LoginSchema;
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     onSubmit: async (values) => {
-      const valid = await schema.isValid(values);
-      if (!valid) return setError(true);
       const response = await login(values);
-      if (response) {
-        const { username, token } = response;
+      const { status, data } = response;
+      if (status === 400) {
+        setError(data);
+      }
+      if (status === 200) {
+        const { username, token } = data;
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         setIsAuth(true);
@@ -39,9 +40,9 @@ export default function Login() {
         <Card className="card shadow-sm">
           <Card.Body className="p-5 row">
             <Form className="w-100" onSubmit={formik.handleSubmit}>
-              <h1 className="text-center mb-4">Войти</h1>
+              <h1 className="text-center mb-4">{t("loginTitle")}</h1>
               <Form.Group className="mb-3" controlId="formBasicUsername">
-                <Form.Label>Логин</Form.Label>
+                <Form.Label>{t("login")}</Form.Label>
                 <Form.Control
                   required
                   isInvalid={error}
@@ -49,11 +50,11 @@ export default function Login() {
                   onChange={formik.handleChange}
                   value={formik.values.username}
                   type="text"
-                  placeholder="Введите логин"
+                  placeholder={t("loginLogin")}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Пароль</Form.Label>
+                <Form.Label>{t("password")}</Form.Label>
                 <Form.Control
                   required
                   name="password"
@@ -61,22 +62,23 @@ export default function Login() {
                   onChange={formik.handleChange}
                   value={formik.values.password}
                   type="password"
-                  placeholder="Введите пароль"
+                  placeholder={t("loginPassword")}
                 />
+                <div className="invalid-feedback">{error && t(error)}</div>
               </Form.Group>
               <Button
                 className="w-100 mb-3"
                 type="submit"
                 variant="outline-primary"
               >
-                Войти
+                {t("loginButton")}
               </Button>
             </Form>
           </Card.Body>
           <Card.Footer className="p-4">
             <div className="text-center">
-              <span>Нет аккаунта? </span>
-              <Link to="/signup">Регистрация</Link>
+              <span>{t("noAccount")} </span>
+              <Link to="/signup">{t("registration")}</Link>
             </div>
           </Card.Footer>
         </Card>

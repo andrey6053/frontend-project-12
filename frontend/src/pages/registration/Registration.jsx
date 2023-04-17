@@ -5,8 +5,10 @@ import { useFormik } from "formik";
 import { signUp } from "../../actions/user";
 import UserContext from "../../contexts/userContext";
 import { SignupSchema } from "../../utils/validator";
+import { useTranslation } from "react-i18next";
 
 export default function Registration() {
+  const {t} = useTranslation()
   const [error, setError] = useState(false);
   const { setIsAuth, setUser } = useContext(UserContext);
 
@@ -44,7 +46,7 @@ export default function Registration() {
         <Card className="card shadow-sm">
           <Card.Body className="p-5 row">
             <Form className="w-100" onSubmit={formik.handleSubmit}>
-              <h1 className="text-center mb-4">Войти</h1>
+              <h1 className="text-center mb-4">{t("registration")}</h1>
               <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Control
                   required
@@ -53,7 +55,7 @@ export default function Registration() {
                   onChange={formik.handleChange}
                   value={formik.values.username}
                   type="text"
-                  placeholder="Имя пользователя"
+                  placeholder={t("regLogin")}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -64,7 +66,7 @@ export default function Registration() {
                   onChange={formik.handleChange}
                   value={formik.values.password}
                   type="password"
-                  placeholder="Пароль"
+                  placeholder={t("regPassword")}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPasswordConfirm">
@@ -75,7 +77,7 @@ export default function Registration() {
                   onChange={formik.handleChange}
                   value={formik.values.passwordConfirmation}
                   type="password"
-                  placeholder="Подтвердите пароль"
+                  placeholder={t("regPasswordConfirm")}
                 />
               </Form.Group>
               <Button
@@ -83,14 +85,14 @@ export default function Registration() {
                 type="submit"
                 variant="outline-primary"
               >
-                Зарегистрироваться
+                {t("regButton")}
               </Button>
             </Form>
           </Card.Body>
           <Card.Footer className="p-4">
             <div className="text-center">
-              <span>Есть аккаунт? </span>
-              <Link to="/login">Войти</Link>
+              <span>{t("hasAccount")} </span>
+              <Link to="/login">{t("loginTitle")}</Link>
             </div>
           </Card.Footer>
         </Card>

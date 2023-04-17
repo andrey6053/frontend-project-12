@@ -5,8 +5,10 @@ import { useFormik } from "formik";
 import { socketEvent } from "../../../actions/message";
 import UserContext from "../../../contexts/userContext";
 import socketContext from "../../../contexts/socketContext";
-
+import sendIcon from "../../../assets/img/send-03-svgrepo-com.svg"
+import { useTranslation } from "react-i18next";
 export default function FormMessage() {
+  const {t} = useTranslation()
   const { user } = useContext(UserContext);
   const { socket } = useContext(socketContext);
   const curChannelId = useSelector((state) => state.channels.currentChannelId);
@@ -37,16 +39,16 @@ export default function FormMessage() {
       <Form.Group className="input-group has-validation">
         <Form.Control
           name="msgText"
-          aria-label="Новое сообщение"
+          aria-label="new Message"
           className="border-0 p-0 ps-2"
           type="text"
-          placeholder="Введите сообщение..."
+          placeholder={t("inputMsg")}
           value={formik.values.msgText}
           onChange={formik.handleChange}
           autoFocus
         />
-        <Button className="btn-group-vertical rounded" type="submit">
-          Отправить
+        <Button className="btn-group-vertical rounded" type="submit" variant="none">
+          <img src={sendIcon} style={{width:"20px"}} alt="" />
         </Button>
       </Form.Group>
     </Form>

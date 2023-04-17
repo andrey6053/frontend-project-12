@@ -4,16 +4,19 @@ import { Container, Col, Button, Nav } from "react-bootstrap";
 import { selectors as channels } from "../../store/reducers/channelSlice";
 import { showModal } from "../../store/reducers/uiSlice";
 import ChannelItem from "./channelsItem/ChannelItem";
+import plusIcon from "../../assets/img/plus-1513-svgrepo-com.svg";
 import MainChannelItem from "./channelsItem/MainChannelItem";
+import { useTranslation } from "react-i18next";
 
 export default function Channels() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channelList = useSelector(channels.selectAll);
   function modalHandler(e) {
     e.preventDefault();
     const modal = {
       type: "newChannel",
-      title: "Создать канал",
+      title: `${t("createChannel")}`,
     };
     dispatch(showModal(modal));
   }
@@ -21,13 +24,13 @@ export default function Channels() {
   return (
     <Col className="d-flex col-4 col-md-3 border-end px-0 bg-light h-100 flex-column">
       <Container className="d-flex mt-1 align-items-center justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t("channels")}</b>
         <Button
-          variant="primary"
+          variant="none"
           className="p-1 btn-group-vertical"
           onClick={modalHandler}
         >
-          Создать
+          <img src={plusIcon} alt="" style={{ width: "20px" }} />
         </Button>
       </Container>
       <Nav
@@ -37,7 +40,10 @@ export default function Channels() {
       >
         {channelList.map((channel) =>
           channel.removable ? (
-            <ChannelItem channel={channel} key={channel.id}></ChannelItem>
+            <ChannelItem
+              channel={channel}
+              key={channel.id}
+            ></ChannelItem>
           ) : (
             <MainChannelItem
               channel={channel}

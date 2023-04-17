@@ -5,8 +5,10 @@ import { selectors as channels } from "../../store/reducers/channelSlice";
 import { selectors as messages } from "../../store/reducers/messageSlice";
 import FormMessage from "./formMessage/FormMessage";
 import MessageItem from "./messageList/MessageItem";
+import { useTranslation } from "react-i18next";
 
 export default function Messages() {
+  const { t } = useTranslation();
   const curChannelId = useSelector((state) => state.channels.currentChannelId);
   const curChannel = useSelector((state) =>
     channels.selectById(state, curChannelId)
@@ -14,7 +16,7 @@ export default function Messages() {
   const msgList = useSelector(messages.selectAll).filter(
     (msg) => msg.channelId === curChannelId
   );
-  if (!curChannelId) return
+  if (!curChannelId) return;
   return (
     <Col className="p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -22,7 +24,9 @@ export default function Messages() {
           <p className="m-0">
             <b># {curChannel.name}</b>
           </p>
-          <span className="text-muted">{msgList.length} сообщений</span>
+          <span className="text-muted">
+            {t("msg", { count: msgList.length })}
+          </span>
         </Container>
         <div className="chat-messages overflow-auto px-5 " id="messages-box">
           {msgList.map((msg) => (

@@ -6,20 +6,20 @@ export const login = async ({ username, password }) => {
       username,
       password,
     });
-    return response.data;
+    return { status: 200, data: response.data };
   } catch (e) {
-    console.log(e.response.data.message);
+    return { status: 400, data: e.response.data.message };
   }
 };
 
-export const signUp = async({username,password}) => {
+export const signUp = async ({ username, password }) => {
   try {
     const response = await axios.post("/api/v1/signup", {
       username,
       password,
     });
-    return response.data
-  }catch(e) {
-    console.log(e.response.data.message)
+    return response.data;
+  } catch (e) {
+    console.log(e.response.data.message);
   }
-}
+};

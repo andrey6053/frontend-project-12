@@ -4,14 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { hideModal } from "../../../store/reducers/uiSlice";
 import { socketEvent } from "../../../actions/message";
-import { selectors, setOwnerNewChannel } from "../../../store/reducers/channelSlice";
+import {
+  selectors,
+  setOwnerNewChannel,
+} from "../../../store/reducers/channelSlice";
 import socketContext from "../../../contexts/socketContext";
 import { ChannelSchema } from "../../../utils/validator";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 export default function ModalContent() {
-  const [error, setError] = useState(false);
-  const [btnDisable,setBtnDisable] = useState(false)
-  const username = localStorage.getItem("username")
+  const { t } = useTranslation();
+  const [error, setError] = useState([]);
+  const [btnDisable, setBtnDisable] = useState(false);
+  const username = localStorage.getItem("username");
   const inputRef = useRef(null);
   const { modal } = useSelector((state) => state.ui);
   const { socket } = useContext(socketContext);
@@ -28,21 +34,24 @@ export default function ModalContent() {
     onSubmit: click,
   });
   function click({ name }) {
-    setBtnDisable(true)
+    setBtnDisable(true);
     try {
       schema.validateSync({ name });
-      isRename &&
+      if (isRename) {
         socketEvent(socket, { id: modal.idChannel, name }, modal.type);
-    if (isAdd) {
-      socketEvent(socket, { name }, modal.type);
-      dispatch(setOwnerNewChannel(username))
-    }
+        toast.success(t("toast_renameChannel"))
+      }
+      if (isAdd) {
+        socketEvent(socket, { name }, modal.type);
+        dispatch(setOwnerNewChannel(username));
+        toast.success(t("toast_createChannel"));
+      }
       dispatch(hideModal());
     } catch (e) {
-      setError(true);
+      setError(e.errors);
       console.log(e.errors);
     } finally {
-      setBtnDisable(false)
+      setBtnDisable(false);
     }
   }
   function modalClose() {
@@ -50,14 +59,15 @@ export default function ModalContent() {
   }
   function modalSubmit(e) {
     e.preventDefault();
-    setBtnDisable(true)
+    setBtnDisable(true);
     if (isRemove) {
       socketEvent(socket, { id: modal.idChannel }, modal.type);
       dispatch(hideModal());
+      toast.success(t("toast_deleteChannel"))
     } else {
       formik.handleSubmit();
     }
-    setBtnDisable(false)
+    setBtnDisable(false);
   }
   useEffect(() => {
     inputRef?.current?.focus();
@@ -69,12 +79,12 @@ export default function ModalContent() {
       </Modal.Header>
       <Modal.Body>
         {isRemove ? (
-          "Вы уверены?"
+          `${t("deleteChannelBody")}`
         ) : (
           <form onSubmit={formik.handleSubmit}>
             <Form.Control
               required
-              isInvalid={error}
+              isInvalid={error.length !== 0}
               name="name"
               onChange={formik.handleChange}
               value={formik.values.username}
@@ -82,16 +92,20 @@ export default function ModalContent() {
               ref={inputRef}
             />
             <div className="invalid-feedback">
-              {error && "Должно быть уникальным"}
+              {error && t(`${error[0]}`)}
             </div>
           </form>
         )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={modalClose}>
-          Отменить
+          {t("cancel")}
         </Button>
-        <Button variant="primary" onClick={(e) => modalSubmit(e)} disabled={btnDisable}>
+        <Button
+          variant="primary"
+          onClick={(e) => modalSubmit(e)}
+          disabled={btnDisable}
+        >
           {modal.title}
         </Button>
       </Modal.Footer>
